@@ -1,0 +1,31 @@
+# Secrets and local env
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.pyo
+.mypy_cache/
+.ruff_cache/
+
+# Runtime data
+orders.db
+*.db
+!portfolio/mockups/
+
+# Backups and keys
+backups/*
+!backups/.gitkeep
+secrets/*
+!secrets/.gitkeep
+
+# Local scratch (not for repo)
+portfolio/_shot_tmp.png
+спам.PNG
+запуск.txt
+скриншоты для портфолио/

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>DB Browser — leads</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; }
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: #f0f0f0;
+      padding: 24px;
+      color: #222;
+    }
+    .window {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: #fff;
+      border: 1px solid #b0b0b0;
+      border-radius: 4px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.12);
+    }
+    .titlebar {
+      background: #e8e8e8;
+      padding: 10px 14px;
+      font-size: 13px;
+      border-bottom: 1px solid #c8c8c8;
+    }
+    .tabs {
+      display: flex;
+      gap: 2px;
+      padding: 8px 12px 0;
+      background: #ececec;
+      border-bottom: 1px solid #c8c8c8;
+    }
+    .tab {
+      padding: 8px 14px;
+      font-size: 12px;
+      background: #ddd;
+      border: 1px solid #bbb;
+      border-bottom: none;
+      border-radius: 4px 4px 0 0;
+    }
+    .tab.active { background: #fff; font-weight: 600; }
+    .content { padding: 16px; }
+    h2 { font-size: 14px; margin-bottom: 12px; color: #444; }
+  table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    th, td {
+      border: 1px solid #d4d4d4;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    th {
+      background: #f5f5f5;
+      font-weight: 600;
+    }
+    tr:nth-child(even) { background: #fafafa; }
+    .schema td:first-child { font-family: Consolas, monospace; color: #005a9e; }
+    .path { color: #666; font-size: 11px; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <div class="window">
+    <div class="titlebar">DB Browser for SQLite — orders.db</div>
+    <div class="tabs">
+      <div class="tab">Database Structure</div>
+      <div class="tab active">Browse Data</div>
+      <div class="tab">Execute SQL</div>
+    </div>
+    <div class="content">
+      <h2>Table: leads</h2>
+      <table class="schema">
+        <thead>
+          <tr><th>cid</th><th>name</th><th>type</th><th>notnull</th><th>dflt_value</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>id</td><td>INTEGER</td><td>0</td><td></td></tr>
+          <tr><td>1</td><td>telegram_id</td><td>INTEGER</td><td>1</td><td></td></tr>
+          <tr><td>2</td><td>name</td><td>TEXT</td><td>0</td><td></td></tr>
+          <tr><td>3</td><td>phone</td><td>TEXT</td><td>0</td><td></td></tr>
+          <tr><td>4</td><td>service</td><td>TEXT</td><td>0</td><td></td></tr>
+          <tr><td>5</td><td>date</td><td>TEXT</td><td>0</td><td></td></tr>
+          <tr><td>6</td><td>created_at</td><td>TEXT</td><td>1</td><td></td></tr>
+          <tr><td>7</td><td>status</td><td>TEXT</td><td>1</td><td>'new'</td></tr>
+        </tbody>
+      </table>
+      <p class="path">C:\Users\...\crm-booking-bot\orders.db</p>
+    </div>
+  </div>
+</body>
+</html>

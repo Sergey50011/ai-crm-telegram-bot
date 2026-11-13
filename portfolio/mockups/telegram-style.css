@@ -1,0 +1,94 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  background: #1a2634;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 28px 20px;
+}
+
+.frame {
+  width: 440px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  border: 1px solid #243447;
+}
+
+.header {
+  background: #17212b;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #0e1621;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #5b9bd5, #2e5f8a);
+  color: #fff;
+  font-weight: 700;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title { font-size: 15px; font-weight: 600; color: #fff; }
+.subtitle { font-size: 13px; color: #6d8a9f; margin-top: 2px; }
+
+.chat {
+  background: #0e1621;
+  padding: 18px 14px 22px;
+  min-height: 540px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pill-date {
+  align-self: center;
+  font-size: 12px;
+  color: #8e9bab;
+  background: #1c2733;
+  padding: 5px 12px;
+  border-radius: 14px;
+  margin-bottom: 4px;
+}
+
+.bubble {
+  max-width: 92%;
+  padding: 9px 12px 7px;
+  border-radius: 14px;
+  font-size: 15px;
+  line-height: 1.4;
+  color: #fff;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.bubble-in {
+  align-self: flex-start;
+  background: #182533;
+  border-top-left-radius: 4px;
+}
+
+.bubble-out {
+  align-self: flex-end;
+  background: #2b5278;
+  border-top-right-radius: 4px;
+}
+
+.meta {
+  display: block;
+  text-align: right;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.48);
+  margin-top: 4px;
+}

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ru" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CRM автосервис — заявки</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="min-h-full bg-slate-950 text-slate-100 font-sans antialiased">
+  <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+    <header class="mb-10 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <p class="text-sm font-medium uppercase tracking-wider text-slate-500">Автосервис</p>
+        <h1 class="text-3xl font-bold tracking-tight text-white">Панель заявок</h1>
+        <p class="mt-1 text-slate-400">Данные из orders.db · таблица leads</p>
+      </div>
+    </header>
+
+    <!-- Карточки статистики -->
+    <div class="mb-8 grid gap-4 sm:grid-cols-3">
+      <div id="card-total" class="rounded-2xl border bg-gradient-to-br from-violet-600/20 to-slate-900 border-violet-500/30 p-6">
+        <p class="text-sm font-medium text-slate-400">Всего заявок</p>
+        <p class="stat-value mt-2 text-4xl font-bold tabular-nums text-white">—</p>
+      </div>
+      <div id="card-progress" class="rounded-2xl border bg-gradient-to-br from-blue-600/20 to-slate-900 border-blue-500/30 p-6">
+        <p class="text-sm font-medium text-slate-400">В работе</p>
+        <p class="stat-value mt-2 text-4xl font-bold tabular-nums text-white">—</p>
+      </div>
+      <div id="card-waiting" class="rounded-2xl border bg-gradient-to-br from-amber-600/20 to-slate-900 border-amber-500/30 p-6">
+        <p class="text-sm font-medium text-slate-400">Ожидают</p>
+        <p class="stat-value mt-2 text-4xl font-bold tabular-nums text-white">—</p>
+      </div>
+    </div>
+
+    <div class="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 shadow-2xl shadow-black/40 backdrop-blur">
+      <div class="border-b border-slate-800 px-6 py-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 class="text-lg font-semibold text-white">Заявки</h2>
+        <div class="flex flex-wrap items-center gap-2">
+          <input
+            id="search-input"
+            type="search"
+            placeholder="Поиск: имя, телефон, услуга…"
+            class="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-sm text-slate-100 w-52 sm:w-64"
+          />
+          <select
+            id="status-filter"
+            class="rounded-lg border border-slate-700 bg-slate-800 px-2 py-1.5 text-sm text-slate-100"
+          >
+            <option value="">Все статусы</option>
+            <option value="new">Новая</option>
+            <option value="in_progress">В работе</option>
+            <option value="completed">Завершена</option>
+          </select>
+        </div>
+        <button
+          type="button"
+          id="btn-refresh"
+          class="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-sm text-slate-200 transition hover:bg-slate-700"
+        >
+          Обновить
+        </button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-slate-800 text-sm">
+          <thead class="bg-slate-900/80">
+            <tr>
+              <th class="px-4 py-3 text-left font-medium text-slate-400">ID</th>
+              <th class="px-4 py-3 text-left font-medium text-slate-400">Клиент</th>
+              <th class="px-4 py-3 text-left font-medium text-slate-400">Телефон</th>
+              <th class="px-4 py-3 text-left font-medium text-slate-400">Услуга</th>
+              <th class="px-4 py-3 text-left font-medium text-slate-400">Дата визита</th>
+              <th class="px-4 py-3 text-left font-medium text-slate-400">Создана</th>
+              <th class="px-4 py-3 text-left font-medium text-slate-400">Статус</th>
+              <th class="px-4 py-3 text-left font-medium text-slate-400">Действие</th>
+            </tr>
+          </thead>
+          <tbody id="leads-body" class="divide-y divide-slate-800/80">
+            <tr>
+              <td colspan="8" class="px-4 py-12 text-center text-slate-500">Загрузка…</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STATUS_META = {
+      new: {
+        label: 'Новая',
+        badge: 'bg-amber-500/15 text-amber-300 ring-amber-500/40',
+      },
+      in_progress: {
+        label: 'В работе',
+        badge: 'bg-blue-500/15 text-blue-300 ring-blue-500/40',
+      },
+      completed: {
+        label: 'Завершена',
+        badge: 'bg-emerald-500/15 text-emerald-300 ring-emerald-500/40',
+      },
+    };
+
+    function badgeHtml(status) {
+      const meta = STATUS_META[status] || STATUS_META.new;
+      return `<span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1 ring-inset ${meta.badge}">${meta.label}</span>`;
+    }
+
+    function statusSelect(id, current) {
+      const options = Object.entries(STATUS_META)
+        .map(([value, meta]) => {
+          const selected = value === current ? 'selected' : '';
+          return `<option value="${value}" ${selected}>${meta.label}</option>`;
+        })
+        .join('');
+      return `
+        <select
+          data-lead-id="${id}"
+          class="status-select rounded-lg border border-slate-700 bg-slate-800 px-2 py-1.5 text-slate-100 text-xs focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
+        >${options}</select>`;
+    }
+
+    let allLeads = [];
+
+    function applyFilters() {
+      const q = (document.getElementById('search-input').value || '').trim().toLowerCase();
+      const status = document.getElementById('status-filter').value;
+      const filtered = allLeads.filter((row) => {
+        if (status && row.status !== status) return false;
+        if (!q) return true;
+        const hay = [row.name, row.phone, row.service, row.date, String(row.id)]
+          .join(' ')
+          .toLowerCase();
+        return hay.includes(q);
+      });
+      renderLeads(filtered, filtered.length !== allLeads.length);
+    }
+
+    function renderLeads(leads, isFiltered = false) {
+      const tbody = document.getElementById('leads-body');
+      if (!leads.length) {
+        const msg = isFiltered ? 'Ничего не найдено' : 'Заявок пока нет';
+        tbody.innerHTML = `<tr><td colspan="8" class="px-4 py-12 text-center text-slate-500">${msg}</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = leads
+        .map(
+          (row) => `
+        <tr class="hover:bg-slate-800/40 transition" data-row-id="${row.id}">
+          <td class="px-4 py-3 font-mono text-slate-400">#${row.id}</td>
+          <td class="px-4 py-3 font-medium text-white">${escapeHtml(row.name)}</td>
+          <td class="px-4 py-3 text-slate-300">${escapeHtml(row.phone)}</td>
+          <td class="px-4 py-3 text-slate-300 max-w-xs truncate" title="${escapeHtml(row.service)}">${escapeHtml(row.service)}</td>
+          <td class="px-4 py-3 text-slate-300">${escapeHtml(row.date)}</td>
+          <td class="px-4 py-3 text-slate-500 text-xs whitespace-nowrap">${formatDate(row.created_at)}</td>
+          <td class="px-4 py-3 status-cell">${badgeHtml(row.status)}</td>
+          <td class="px-4 py-3">${statusSelect(row.id, row.status)}</td>
+        </tr>`
+        )
+        .join('');
+
+      tbody.querySelectorAll('.status-select').forEach((el) => {
+        el.addEventListener('change', () => onStatusChange(el));
+      });
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function formatDate(iso) {
+      if (!iso || iso === '—') return '—';
+      try {
+        const d = new Date(iso);
+        return d.toLocaleString('ru-RU', { dateStyle: 'short', timeStyle: 'short' });
+      } catch {
+        return iso;
+      }
+    }
+
+    async function loadStats() {
+      const res = await fetch('/api/stats');
+      const data = await res.json();
+      document.querySelector('#card-total .stat-value').textContent = data.total;
+      document.querySelector('#card-progress .stat-value').textContent = data.in_progress;
+      document.querySelector('#card-waiting .stat-value').textContent = data.waiting;
+    }
+
+    async function loadLeads() {
+      const res = await fetch('/api/leads');
+      allLeads = await res.json();
+      applyFilters();
+    }
+
+    async function refreshAll() {
+      await Promise.all([loadStats(), loadLeads()]);
+    }
+
+    async function onStatusChange(selectEl) {
+      const id = selectEl.dataset.leadId;
+      const status = selectEl.value;
+      const prev = selectEl.dataset.prev || selectEl.value;
+      selectEl.disabled = true;
+
+      try {
+        const res = await fetch(`/api/leads/${id}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status }),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || res.statusText);
+        }
+        const row = document.querySelector(`tr[data-row-id="${id}"]`);
+        if (row) {
+          row.querySelector('.status-cell').innerHTML = badgeHtml(status);
+        }
+        selectEl.dataset.prev = status;
+        await loadStats();
+      } catch (e) {
+        alert('Не удалось обновить статус: ' + e.message);
+        selectEl.value = prev;
+      } finally {
+        selectEl.disabled = false;
+      }
+    }
+
+    document.getElementById('btn-refresh').addEventListener('click', refreshAll);
+    document.getElementById('search-input').addEventListener('input', applyFilters);
+    document.getElementById('status-filter').addEventListener('change', applyFilters);
+    refreshAll();
+  </script>
+</body>
+</html>

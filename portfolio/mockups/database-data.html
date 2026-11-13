@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>DB Browser — данные leads</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; }
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: #f0f0f0;
+      padding: 24px;
+      color: #222;
+    }
+    .window {
+      max-width: 1280px;
+      margin: 0 auto;
+      background: #fff;
+      border: 1px solid #b0b0b0;
+      border-radius: 4px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.12);
+    }
+    .titlebar {
+      background: #e8e8e8;
+      padding: 10px 14px;
+      font-size: 13px;
+      border-bottom: 1px solid #c8c8c8;
+    }
+    .tabs {
+      display: flex;
+      gap: 2px;
+      padding: 8px 12px 0;
+      background: #ececec;
+      border-bottom: 1px solid #c8c8c8;
+    }
+    .tab {
+      padding: 8px 14px;
+      font-size: 12px;
+      background: #ddd;
+      border: 1px solid #bbb;
+      border-bottom: none;
+      border-radius: 4px 4px 0 0;
+    }
+    .tab.active { background: #fff; font-weight: 600; }
+    .content { padding: 16px; overflow-x: auto; }
+    h2 { font-size: 14px; margin-bottom: 12px; color: #444; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    th, td {
+      border: 1px solid #d4d4d4;
+      padding: 6px 7px;
+      text-align: left;
+      white-space: nowrap;
+    }
+    th { background: #f5f5f5; font-weight: 600; position: sticky; top: 0; }
+    tr:nth-child(even) { background: #fafafa; }
+    td.status-new { color: #9a6700; font-weight: 600; }
+    td.status-work { color: #0b5cab; font-weight: 600; }
+    td.status-done { color: #1a7f37; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="window">
+    <div class="titlebar">DB Browser for SQLite — orders.db</div>
+    <div class="tabs">
+      <div class="tab">Database Structure</div>
+      <div class="tab active">Browse Data</div>
+      <div class="tab">Execute SQL</div>
+    </div>
+    <div class="content">
+      <h2>Table: leads</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>id</th><th>telegram_id</th><th>name</th><th>phone</th><th>service</th>
+            <th>date</th><th>created_at</th><th>status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>900001</td><td>Марина Козлова</td><td>+7 915 222-33-44</td><td>Kia Rio — скрипят колодки</td><td>пятница после 15:00</td><td>2026-11-08T10:00:00+00:00</td><td class="status-work">in_progress</td></tr>
+          <tr><td>2</td><td>900002</td><td>Олег Петров</td><td>+7 903 111-22-33</td><td>Toyota Camry — замена масла и фильтра</td><td>суббота утром</td><td>2026-11-08T10:12:00+00:00</td><td class="status-work">in_progress</td></tr>
+          <tr><td>3</td><td>900003</td><td>Виктор Смирнов</td><td>+7 905 123-45-67</td><td>VW Polo — диагностика двигателя</td><td>завтра в 10:00</td><td>2026-11-08T10:24:00+00:00</td><td class="status-new">new</td></tr>
+          <tr><td>4</td><td>900004</td><td>Ильяс Нурланов</td><td>+7 977 400-11-22</td><td>Hyundai Solaris — развал-схождение</td><td>12 ноября</td><td>2026-11-08T10:36:00+00:00</td><td class="status-work">in_progress</td></tr>
+          <tr><td>5</td><td>900005</td><td>Анна Черных</td><td>+7 926 555-01-88</td><td>Шиномонтаж R17</td><td>8 ноября</td><td>2026-11-08T10:48:00+00:00</td><td class="status-done">completed</td></tr>
+          <tr><td>6</td><td>900006</td><td>Руслан Гасанов</td><td>+7 918 300-77-66</td><td>Acura MDX — плановое ТО</td><td>15 ноября</td><td>2026-11-08T11:00:00+00:00</td><td class="status-done">completed</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
