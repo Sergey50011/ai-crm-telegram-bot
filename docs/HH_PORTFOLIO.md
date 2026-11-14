@@ -12,7 +12,7 @@
 ## Ссылки (подставьте свои после публикации на GitHub)
 
 1. Репозиторий: `https://github.com/<ваш_логин>/ai-crm-telegram-bot`
-2. Демо-бот в Telegram: `@AutoAI_booking_bot` (или ваш @username бота)
+2. Демо-бот в Telegram: `@ваш_демо_бот`
 
 Скрины для hh: папка `portfolio-screenshots/00-hh-poryadok/`.
 
